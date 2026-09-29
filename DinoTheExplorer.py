@@ -16,6 +16,8 @@ dino_speed = 0
 gravity = 0.8
 jump = -15
 
+jumping = False
+
 screen = pygame.display.set_mode(
     (width, height),
     pygame.DOUBLEBUF,
@@ -58,10 +60,12 @@ while running:
             if event.key == pygame.K_SPACE and state == start:
                     state = playing
                     dino_speed = jump
+                    jumping = True
 
             elif event.key == pygame.K_SPACE and state == playing:
                 if dino_y + dino_height >= ground:
                     dino_speed = jump
+                    jumping = True
 
             elif event.key == pygame.K_RETURN and state == over:
 
@@ -71,9 +75,12 @@ while running:
                 dino_speed = 0
 
                 obstacle_x = 800
+                obstacle_width = 25
 
                 score = 0
                 passed = False
+
+                jumping = False
 
             elif event.key == pygame.K_ESCAPE and state == playing:
                     state = paused
@@ -81,7 +88,14 @@ while running:
             elif event.key == pygame.K_ESCAPE and state == paused:
                     state = playing
 
+        if event.type == pygame.KEYUP:
+             if event.key == pygame.K_SPACE:
+                  jumping = False
+
     if state == playing:
+
+        if jumping == True and dino_speed < 0:
+             dino_speed = dino_speed - 0.35
 
         dino_speed = dino_speed + gravity
 
@@ -90,6 +104,7 @@ while running:
         if dino_y + dino_height >= ground:
             dino_y = ground - dino_height
             dino_speed = 0
+            jumping = False
 
         obstacle_x = obstacle_x - obstacle_speed
 
@@ -99,6 +114,14 @@ while running:
 
         if obstacle_x + obstacle_width < 0:
             obstacle_x = random.randint(800, 1100)
+
+            obstacle_type = random.randint(1,2)
+
+            if obstacle_type == 1:
+                 obstacle_width = 25
+
+            else:
+                 obstacle_width = 55
 
             passed = False
 
