@@ -35,6 +35,12 @@ over = False
 
 font = pygame.font.Font(None, 60)
 
+score = 0
+
+passed = False
+
+score_font = pygame.font.Font(None, 40)
+
 running = True
 
 while running:
@@ -63,8 +69,14 @@ while running:
 
         obstacle_x = obstacle_x - obstacle_speed
 
+        if obstacle_x + obstacle_width < dino_x and passed == False:
+            score = score + 1
+            passed = True
+
         if obstacle_x + obstacle_width < 0:
             obstacle_x = random.randint(800, 1100)
+
+            passed = False
 
         if dino_x + dino_width > obstacle_x:
 
@@ -109,6 +121,17 @@ while running:
         (0, ground),
         (width, ground),
         3
+    )
+
+    score_text = score_font.render(
+        "score: " + str(score),
+        True,
+        (0, 0, 0)
+    )
+
+    screen.blit(
+        score_text,
+        (650,20)
     )
 
     if over == True:
