@@ -29,7 +29,11 @@ ground = 350
 obstacle_x = 800
 obstacle_width = 25
 obstacle_height = 70
-obstacle_speed = 5
+obstacle_speed = 10
+
+over = False
+
+font = pygame.font.Font(None, 60)
 
 running = True
 
@@ -44,21 +48,30 @@ while running:
 
             if event.key == pygame.K_SPACE:
 
-                if dino_y + dino_height >= ground:
+                if dino_y + dino_height >= ground and over == False:
                     dino_speed = jump
 
-    dino_speed = dino_speed + gravity
+    if over == False:
 
-    dino_y = dino_y + dino_speed
+        dino_speed = dino_speed + gravity
 
-    if dino_y + dino_height >= ground:
-        dino_y = ground - dino_height
-        dino_speed = 0
+        dino_y = dino_y + dino_speed
 
-    obstacle_x = obstacle_x - obstacle_speed
+        if dino_y + dino_height >= ground:
+            dino_y = ground - dino_height
+            dino_speed = 0
 
-    if obstacle_x + obstacle_width < 0:
-        obstacle_x = random.randint(800, 1100)
+        obstacle_x = obstacle_x - obstacle_speed
+
+        if obstacle_x + obstacle_width < 0:
+            obstacle_x = random.randint(800, 1100)
+
+        if dino_x + dino_width > obstacle_x:
+
+            if dino_x < obstacle_x + obstacle_width:
+
+                if dino_y + dino_height > ground - obstacle_height:
+                    over = True
 
     screen.fill((240,240,240))
 
@@ -97,6 +110,19 @@ while running:
         (width, ground),
         3
     )
+
+    if over == True:
+
+        over_text = font.render(
+            "GAME OVER",
+            True,
+            (0, 0, 0)
+        )
+
+        screen.blit(
+            over_text,
+            (270, 100)
+        )
 
     pygame.display.flip()
 
