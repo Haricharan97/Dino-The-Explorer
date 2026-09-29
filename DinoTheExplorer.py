@@ -29,17 +29,20 @@ ground = 350
 obstacle_x = 800
 obstacle_width = 25
 obstacle_height = 70
-obstacle_speed = 10
-
-over = False
+obstacle_speed = 5
 
 font = pygame.font.Font(None, 60)
+small_font = pygame.font.Font(None, 40)
 
 score = 0
-
 passed = False
 
-score_font = pygame.font.Font(None, 40)
+start = 0
+playing = 1
+paused = 2 
+over = 3
+
+state = start
 
 running = True
 
@@ -52,12 +55,33 @@ while running:
 
         if event.type == pygame.KEYDOWN:
 
-            if event.key == pygame.K_SPACE:
-
-                if dino_y + dino_height >= ground and over == False:
+            if event.key == pygame.K_SPACE and state == start:
+                    state = playing
                     dino_speed = jump
 
-    if over == False:
+            elif event.key == pygame.K_SPACE and state == playing:
+                if dino_y + dino_height >= ground:
+                    dino_speed = jump
+
+            elif event.key == pygame.K_RETURN and state == over:
+
+                state = playing
+
+                dino_y = ground - dino_height
+                dino_speed = 0
+
+                obstacle_x = 800
+
+                score = 0
+                passed = False
+
+            elif event.key == pygame.K_ESCAPE and state == playing:
+                    state = paused
+
+            elif event.key == pygame.K_ESCAPE and state == paused:
+                    state = playing
+
+    if state == playing:
 
         dino_speed = dino_speed + gravity
 
@@ -83,7 +107,7 @@ while running:
             if dino_x < obstacle_x + obstacle_width:
 
                 if dino_y + dino_height > ground - obstacle_height:
-                    over = True
+                    state = over
 
     screen.fill((240,240,240))
 
@@ -123,7 +147,7 @@ while running:
         3
     )
 
-    score_text = score_font.render(
+    score_text = small_font.render(
         "score: " + str(score),
         True,
         (0, 0, 0)
@@ -134,7 +158,20 @@ while running:
         (650,20)
     )
 
-    if over == True:
+    if state == start:
+
+        start_text = font.render(
+            "PRESS SPACE",
+            True,
+            (0, 0, 0)
+        )
+
+        screen.blit(
+            start_text,
+            (240, 100)
+        )
+
+    if state == over:
 
         over_text = font.render(
             "GAME OVER",
@@ -142,9 +179,44 @@ while running:
             (0, 0, 0)
         )
 
+        restart_text = small_font.render(
+            "Press ENTER to RESTART",
+            True,
+            (0, 0, 0)
+        )
+
         screen.blit(
             over_text,
             (270, 100)
+        )
+
+        screen.blit(
+            restart_text,
+            (250, 170)
+        )
+
+    if state == paused:
+
+        pause_text = font.render(
+            "PAUSED",
+            True,
+            (0, 0, 0)
+        )
+
+        resume_text = small_font.render(
+            "Pess ESC to Resume",
+            True,
+            (0, 0, 0)
+        )
+
+        screen.blit(
+            pause_text,
+            (300,100)
+        )
+
+        screen.blit(
+            resume_text,
+            (270, 170)
         )
 
     pygame.display.flip()
