@@ -280,8 +280,10 @@ while running:
                     furtest_x + furthest_width + gap
                 )
 
-                if abs(obstacle[0] - coin_x) < 150:
-                    coin_x = obstacle[0] + obstacle[2] + 150
+                if obstacle[0] + obstacle[2] > coin_x - 100:
+                    if obstacle[0] < coin_x + coin_size + 100:
+
+                        obstacle[0]= (coin_x + coin_size + 150)
 
                 obstacle[4] = False
 
@@ -337,8 +339,11 @@ while running:
 
                         for obstacle in obstacles:
 
-                            if abs(coin_x - obstacle[0]) < 100:
-                                coin_x = coin_x + 150
+                            if coin_x + coin_size > obstacle[0] - 100:
+
+                                if coin_x < obstacle[0] + obstacle[2] + 100:
+
+                                    coin_x = (obstacle[0] + obstacle[2] + 150)
 
                         coin_y = random.choice(
                             [220, 260, 300]
@@ -358,8 +363,11 @@ while running:
 
             for obstacle in obstacles:
 
-                if abs(coin_x - obstacle[0]) < 100:
-                    coin_x = coin_x + 150
+                if coin_x + coin_size > obstacle[0] - 100:
+
+                    if coin_x < obstacle[0] + obstacle[2] + 100:
+
+                        coin_x = (obstacle[0] + obstacle[2] + 150)
 
             coin_y = random.choice(
                 [220, 260, 300]
@@ -462,7 +470,7 @@ while running:
 
         pygame.draw.rect(
             screen,
-            (255, 255, 255),
+            (255, 0, 0),
             (
                 int(coin_x) + 6,
                 int(coin_y) + 6,
