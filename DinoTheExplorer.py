@@ -39,13 +39,14 @@ obstacle_height = 70
 obstacle_speed = 5
 obstacle_type = 1
 
-high_obstacle = 250
+high_obstacle = 280
 low_obstacle = 320
 
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
 
 score = 0
+high_score = 0
 passed = False
 
 start = 0
@@ -67,10 +68,12 @@ while running:
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_SPACE and state == start:
-                    state = playing
+                state = playing
 
             elif event.key == pygame.K_UP and state == playing:
                 if dino_y + dino_height >= ground:
+                    dino_height = normal_height
+                    dino_y = ground - dino_height
                     dino_speed = jump
                     jumping = True
 
@@ -95,13 +98,13 @@ while running:
                 jumping = False
 
             elif event.key == pygame.K_ESCAPE and state == playing:
-                    state = paused
+                state = paused
 
             elif event.key == pygame.K_SPACE and state == paused:
-                    state = playing
+                state = playing
 
         if event.type == pygame.KEYUP:
-             if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP:
                   jumping = False
 
     if state == playing:
@@ -109,17 +112,19 @@ while running:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_DOWN] and dino_y + dino_height >= ground:
-             dino_height = crouch_height
-             dino_y = ground - dino_height
+             
+            dino_height = crouch_height
+            dino_y = ground - dino_height
 
         else:
 
-             if dino_y + dino_height >= ground:
-                  dino_height = normal_height
-                  dino_y = ground - dino_height
+            if dino_y + dino_height >= ground:
+                  
+                dino_height = normal_height
+                dino_y = ground - dino_height
 
         if jumping == True and dino_speed < 0:
-             dino_speed = dino_speed - 0.35
+            dino_speed = dino_speed - 0.35
 
         dino_speed = dino_speed + gravity
 
@@ -136,6 +141,9 @@ while running:
             score = score + 1
             passed = True
 
+            if score > high_score:
+                 high_score = score
+
             if score % 5 == 0:
                  obstacle_speed = obstacle_speed + 1
 
@@ -145,7 +153,10 @@ while running:
         if obstacle_x + obstacle_width < 0:
             obstacle_x = random.randint(800, 1100)
 
-            obstacle_type = random.randint(1,4)
+            if score < 5:
+                obstacle_type = random.randint(1,2)
+            else:
+                 obstacle_type = random.randint(1,4)
 
             if obstacle_type == 1:
                  obstacle_width = 25
@@ -177,23 +188,23 @@ while running:
         elif obstacle_type == 3:
              if dino_x + dino_width > obstacle_x:
 
-                  if dino_x < obstacle_x + obstacle_width:
+                if dino_x < obstacle_x + obstacle_width:
 
-                       if dino_y < high_obstacle + obstacle_height:
+                    if dino_y < high_obstacle + obstacle_height:
 
-                            if dino_y + dino_height > high_obstacle:
-                                 state = over
+                        if dino_y + dino_height > high_obstacle:
+                            state = over
 
         elif obstacle_type == 4:
 
-             if dino_x + dino_width > obstacle_x:
+            if dino_x + dino_width > obstacle_x:
 
-                  if dino_x < obstacle_x + obstacle_width:
+                if dino_x < obstacle_x + obstacle_width:
 
-                       if dino_y < low_obstacle + obstacle_height:
+                    if dino_y < low_obstacle + obstacle_height:
 
-                            if dino_y + dino_height > low_obstacle:
-                                 state = over
+                        if dino_y + dino_height > low_obstacle:
+                            state = over
 
     screen.fill((240,240,240))
 
@@ -270,6 +281,17 @@ while running:
     screen.blit(
         score_text,
         (650,20)
+    )
+
+    high_score_text = small_font.render(
+         "High: " + str(high_score),
+         True,
+         (0, 0, 0)
+    )
+
+    screen.blit(
+         high_score_text,
+         (20, 20)
     )
 
     if state == start:
