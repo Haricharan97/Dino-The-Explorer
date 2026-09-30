@@ -12,6 +12,9 @@ dino_y = 280
 dino_width = 40
 dino_height = 70
 
+normal_height = 70
+crouch_height = 35
+
 dino_speed = 0
 gravity = 0.8
 jump = -15
@@ -32,6 +35,10 @@ obstacle_x = 800
 obstacle_width = 25
 obstacle_height = 70
 obstacle_speed = 5
+obstacle_type = 1
+
+high_obstacle = 250
+low_obstacle = 320
 
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
@@ -59,23 +66,25 @@ while running:
 
             if event.key == pygame.K_SPACE and state == start:
                     state = playing
-                    dino_speed = jump
-                    jumping = True
 
-            elif event.key == pygame.K_SPACE and state == playing:
+            elif event.key == pygame.K_UP and state == playing:
                 if dino_y + dino_height >= ground:
                     dino_speed = jump
                     jumping = True
 
-            elif event.key == pygame.K_RETURN and state == over:
+            elif event.key == pygame.K_SPACE and state == over:
 
                 state = playing
 
+                dino_height = normal_height
                 dino_y = ground - dino_height
                 dino_speed = 0
 
                 obstacle_x = 800
                 obstacle_width = 25
+
+                obstacle_height = 70
+                obstacle_type = 1
 
                 score = 0
                 passed = False
@@ -85,14 +94,26 @@ while running:
             elif event.key == pygame.K_ESCAPE and state == playing:
                     state = paused
 
-            elif event.key == pygame.K_ESCAPE and state == paused:
+            elif event.key == pygame.K_SPACE and state == paused:
                     state = playing
 
         if event.type == pygame.KEYUP:
-             if event.key == pygame.K_SPACE:
+             if event.key == pygame.K_UP:
                   jumping = False
 
     if state == playing:
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_DOWN] and dino_y + dino_height >= ground:
+             dino_height = crouch_height
+             dino_y = ground - dino_height
+
+        else:
+
+             if dino_y + dino_height >= ground:
+                  dino_height = normal_height
+                  dino_y = ground - dino_height
 
         if jumping == True and dino_speed < 0:
              dino_speed = dino_speed - 0.35
@@ -115,22 +136,55 @@ while running:
         if obstacle_x + obstacle_width < 0:
             obstacle_x = random.randint(800, 1100)
 
-            obstacle_type = random.randint(1,2)
+            obstacle_type = random.randint(1,4)
 
             if obstacle_type == 1:
                  obstacle_width = 25
+                 obstacle_height = 70
 
-            else:
-                 obstacle_width = 55
+            elif obstacle_type == 2:
+                 obstacle_width == 55
+                 obstacle_height = 70
+
+            elif obstacle_type == 3:
+                 obstacle_width = 50
+                 obstacle_height = 25
+
+            elif obstacle_type == 4:
+                 obstacle_width = 50
+                 obstacle_height = 25
 
             passed = False
 
-        if dino_x + dino_width > obstacle_x:
+        if obstacle_type == 1 or obstacle_type == 2:
 
-            if dino_x < obstacle_x + obstacle_width:
+            if dino_x + dino_width > obstacle_x:
 
-                if dino_y + dino_height > ground - obstacle_height:
-                    state = over
+                if dino_x < obstacle_x + obstacle_width:
+
+                    if dino_y + dino_height > ground - obstacle_height:
+                        state = over
+
+        elif obstacle_type == 3:
+             if dino_x + dino_width > obstacle_x:
+
+                  if dino_x < obstacle_x + obstacle_width:
+
+                       if dino_y < high_obstacle + obstacle_height:
+
+                            if dino_y + dino_height > high_obstacle:
+                                 state = over
+
+        elif obstacle_type == 4:
+
+             if dino_x + dino_width > obstacle_x:
+
+                  if dino_x < obstacle_x + obstacle_width:
+
+                       if dino_y < low_obstacle + obstacle_height:
+
+                            if dino_y + dino_height > low_obstacle:
+                                 state = over
 
     screen.fill((240,240,240))
 
@@ -151,16 +205,44 @@ while running:
             )
     )
 
-    pygame.draw.rect(
-        screen,
-        (0, 120, 0),
-        (
-            int(obstacle_x),
-            ground - obstacle_height,
-            obstacle_width,
-            obstacle_height
+    if obstacle_type == 1 or obstacle_type == 2:
+
+        pygame.draw.rect(
+            screen,
+            (0, 120, 0),
+            (
+                int(obstacle_x),
+                ground - obstacle_height,
+                obstacle_width,
+                obstacle_height
+            )
         )
-    )
+
+    elif obstacle_type == 3:
+
+         pygame.draw.rect(
+              screen,
+              (180, 50, 50),
+              (
+                   int(obstacle_x),
+                   high_obstacle,
+                   obstacle_width,
+                   obstacle_height
+              )
+         )
+
+    elif obstacle_type == 4:
+    
+             pygame.draw.rect(
+                  screen,
+                  (180, 50, 50),
+                  (
+                       int(obstacle_x),
+                       low_obstacle,
+                       obstacle_width,
+                       obstacle_height
+                  )
+             )
 
     pygame.draw.line(
         screen,
@@ -203,7 +285,7 @@ while running:
         )
 
         restart_text = small_font.render(
-            "Press ENTER to RESTART",
+            "Press SPACE to RESTART",
             True,
             (0, 0, 0)
         )
@@ -227,7 +309,7 @@ while running:
         )
 
         resume_text = small_font.render(
-            "Pess ESC to Resume",
+            "Pess SPACE to Resume",
             True,
             (0, 0, 0)
         )
