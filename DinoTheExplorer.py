@@ -19,6 +19,8 @@ dino_speed = 0
 gravity = 0.8
 jump = -15
 
+current_jump = jump
+
 jumping = False
 
 fast_fall = 1.2
@@ -79,7 +81,8 @@ while running:
                 if dino_y + dino_height >= ground:
                     dino_height = normal_height
                     dino_y = ground - dino_height
-                    dino_speed = jump
+                    current_jump = jump - (obstacle_speed -5) * 0.4
+                    dino_speed = current_jump
                     jumping = True
 
             elif event.key == pygame.K_SPACE and state == over:
@@ -198,20 +201,17 @@ while running:
 
             if obstacle[0] + obstacle[2] < 0:
 
-                furthest_x = max(
-                    obstacles[0][0],
-                    obstacles[1][0]
-                )
+                if obstacles[0][0] > obstacles[1][0]:
 
-                gap = random.randint(
-                    gap_min,
-                    gap_max
-                )
+                    furtest_x = obstacles[0][0]
+                    furthest_width = obstacles[0][2]
+                    previous_type = obstacles[0][1]
 
-                obstacle[0] = max(
-                    width,
-                    furthest_x + gap
-                )
+                else:
+                    furtest_x = obstacles[1][0]
+                    furthest_width = obstacles[1][2]
+                    previous_type = obstacles[1][1]
+
 
                 if level == 1:
                     obstacle[1] = random.randint(1,2)
@@ -241,6 +241,29 @@ while running:
 
                     obstacle[2] = 50
                     obstacle[3] = 25
+
+                gap = random.randint(
+                    gap_min,
+                    gap_max
+                )
+
+                gap = gap + int(
+                    (obstacle_speed -5) * 25
+                )
+
+                if obstacle[1] == 2:
+                    gap = gap + 30
+
+                if previous_type == 3 or previous_type == 4:
+
+                    if obstacle[1] == 3 or obstacle[1] == 4:
+
+                        gap = gap + 70
+
+                obstacle[0] = max(
+                    width,
+                    furtest_x + furthest_width + gap
+                )
 
                 obstacle[4] = False
 
