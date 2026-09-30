@@ -50,6 +50,15 @@ obstacles = [
     [1150, 2, 55, 70, False]
 ]
 
+coin_x = 1000
+coin_y = 300
+
+coin_size = 20
+
+coins = 0
+
+coin_type = 1
+
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
 
@@ -106,6 +115,12 @@ while running:
                     [800, 1, 25, 70, False],
                     [1150, 2, 55, 70, False]
                 ]
+
+                coins = 0
+
+                coin_x = 1000
+                coin_y = 300
+                coin_type = 1
 
             elif event.key == pygame.K_ESCAPE and state == playing:
                 state = paused
@@ -265,6 +280,9 @@ while running:
                     furtest_x + furthest_width + gap
                 )
 
+                if abs(obstacle[0] - coin_x) < 150:
+                    coin_x = obstacle[0] + obstacle[2] + 150
+
                 obstacle[4] = False
 
             if obstacle[1] == 1 or obstacle[1] == 2:
@@ -298,6 +316,62 @@ while running:
                             if dino_y + dino_height > low_obstacle:
 
                                 state = over
+
+        coin_x = coin_x - obstacle_speed
+
+        if dino_x + dino_width > coin_x:
+
+            if dino_x < coin_x + coin_size:
+
+                if dino_y + dino_height > coin_y:
+
+                    if dino_y < coin_y + coin_size:
+
+                        if coin_type == 1:
+                            coins = coins + 1
+
+                        elif coin_type == 2:
+                            coins = coins + 5
+
+                        coin_x = width + random.randint(300, 600)
+
+                        for obstacle in obstacles:
+
+                            if abs(coin_x - obstacle[0]) < 100:
+                                coin_x = coin_x + 150
+
+                        coin_y = random.choice(
+                            [220, 260, 300]
+                        )
+
+                        coin_chance = random.randint(1, 5)
+
+                        if coin_chance == 1:
+                            coin_type = 2
+
+                        else:
+                            coin_type = 1
+
+        if coin_x + coin_size < 0:
+
+            coin_x = width + random.randint(300, 600)
+
+            for obstacle in obstacles:
+
+                if abs(coin_x - obstacle[0]) < 100:
+                    coin_x = coin_x + 150
+
+            coin_y = random.choice(
+                [220, 260, 300]
+            )
+
+            coin_chance = random.randint(1, 5)
+
+            if coin_chance == 1:
+                coin_type = 2
+
+            else:
+                coin_type = 1
 
     screen.fill((240,240,240))
 
@@ -360,6 +434,43 @@ while running:
                     )
                 )
 
+    if coin_type == 1:
+
+        pygame.draw.rect(
+            screen,
+            (255, 190, 0),
+            (
+                int(coin_x),
+                int(coin_y),
+                coin_size,
+                coin_size
+            )
+        )
+
+    elif coin_type == 2:
+
+        pygame.draw.rect(
+            screen,
+            (255, 220, 0),
+            (
+                int(coin_x),
+                int(coin_y),
+                coin_size,
+                coin_size
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),
+            (
+                int(coin_x) + 6,
+                int(coin_y) + 6,
+                8,
+                8
+            )
+        )
+
     pygame.draw.line(
         screen,
         (0, 0, 0),
@@ -388,6 +499,17 @@ while running:
     screen.blit(
          high_score_text,
          (20, 20)
+    )
+
+    coin_text = small_font.render(
+        "Coins: " + str(coins),
+        True,
+        (0, 0, 0)
+    )
+
+    screen.blit(
+        coin_text,
+        (320,20)
     )
 
     if state == start:
