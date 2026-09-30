@@ -21,6 +21,8 @@ jump = -15
 
 jumping = False
 
+fast_fall = 1.2
+
 screen = pygame.display.set_mode(
     (width, height),
     pygame.DOUBLEBUF,
@@ -112,6 +114,9 @@ while running:
             if event.key == pygame.K_UP:
                   jumping = False
 
+                  if dino_speed < -6:
+                      dino_speed = -6
+
     if state == playing:
 
         keys = pygame.key.get_pressed()
@@ -132,6 +137,9 @@ while running:
             dino_speed = dino_speed - 0.35
 
         dino_speed = dino_speed + gravity
+
+        if keys[pygame.K_DOWN] and dino_y + dino_height < ground:
+            dino_speed = dino_speed + fast_fall
 
         dino_y = dino_y + dino_speed
 
@@ -173,7 +181,7 @@ while running:
 
             obstacle_speed = 8
 
-            gap_min = 280
+            gap_min = 300
             gap_max = 400
 
         for obstacle in obstacles:
