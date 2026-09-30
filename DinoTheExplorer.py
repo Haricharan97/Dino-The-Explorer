@@ -65,6 +65,8 @@ small_font = pygame.font.Font(None, 40)
 score = 0
 high_score = 0
 
+lives = 3
+
 start = 0
 playing = 1
 paused = 2 
@@ -122,6 +124,8 @@ while running:
                 coin_y = 300
                 coin_type = 1
 
+                lives = 3
+
             elif event.key == pygame.K_ESCAPE and state == playing:
                 state = paused
 
@@ -136,6 +140,8 @@ while running:
                       dino_speed = -6
 
     if state == playing:
+
+        hit = False
 
         keys = pygame.key.get_pressed()
 
@@ -294,7 +300,7 @@ while running:
                     if dino_x < obstacle[0] + obstacle[2]:
 
                         if dino_y + dino_height > ground - obstacle[3]:
-                            state = over
+                            hit = True
 
             elif obstacle[1] == 3:
 
@@ -305,7 +311,7 @@ while running:
                         if dino_y < high_obstacle + obstacle[3]:
 
                             if dino_y + dino_height > high_obstacle:
-                                state = over
+                                hit = True
 
             elif obstacle[1] == 4:
 
@@ -317,7 +323,27 @@ while running:
 
                             if dino_y + dino_height > low_obstacle:
 
-                                state = over
+                                hit = True
+
+        if hit == True:
+
+            lives = lives - 1
+
+            if lives == 0:
+                state = over
+
+            else:
+
+                dino_height = normal_height
+                dino_y = ground - dino_height
+                dino_speed = 0
+                jumping = False
+
+                obstacles[0][0] = 800
+                obstacles[1][0] = 1200
+
+                obstacles[0][4] = False
+                obstacles[1][4] = False
 
         coin_x = coin_x - obstacle_speed
 
@@ -488,7 +514,7 @@ while running:
     )
 
     score_text = small_font.render(
-        "score: " + str(score),
+        "Score: " + str(score),
         True,
         (0, 0, 0)
     )
@@ -517,7 +543,18 @@ while running:
 
     screen.blit(
         coin_text,
-        (320,20)
+        (650,50)
+    )
+
+    lives_text = small_font.render(
+        "lives: " + str(lives),
+        True,
+        (0, 0, 0)
+    )
+
+    screen.blit(
+        lives_text,
+        (20, 50)
     )
 
     if state == start:
@@ -527,6 +564,8 @@ while running:
             True,
             (0, 0, 0)
         )
+
+
 
         screen.blit(
             start_text,
