@@ -27,6 +27,8 @@ screen = pygame.display.set_mode(
     vsync= 1
     )
 
+pygame.display.set_caption("Dino The Explorer")
+
 clock = pygame.time.Clock()
 
 ground = 350
@@ -82,12 +84,13 @@ while running:
 
                 obstacle_x = 800
                 obstacle_width = 25
-
                 obstacle_height = 70
                 obstacle_type = 1
 
                 score = 0
                 passed = False
+
+                obstacle_speed = 5
 
                 jumping = False
 
@@ -133,6 +136,12 @@ while running:
             score = score + 1
             passed = True
 
+            if score % 5 == 0:
+                 obstacle_speed = obstacle_speed + 1
+
+                 if obstacle_speed > 10:
+                      obstacle_speed = 10
+
         if obstacle_x + obstacle_width < 0:
             obstacle_x = random.randint(800, 1100)
 
@@ -143,7 +152,7 @@ while running:
                  obstacle_height = 70
 
             elif obstacle_type == 2:
-                 obstacle_width == 55
+                 obstacle_width = 55
                  obstacle_height = 70
 
             elif obstacle_type == 3:
