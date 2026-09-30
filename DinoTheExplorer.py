@@ -36,6 +36,11 @@ obstacle_speed = 5
 high_obstacle = 280
 low_obstacle = 320
 
+level = 1 
+
+gap_min = 400
+gap_max = 550
+
 obstacles = [
     [800, 1, 25, 70, False],
     [1150, 2, 55, 70, False]
@@ -46,7 +51,6 @@ small_font = pygame.font.Font(None, 40)
 
 score = 0
 high_score = 0
-passed = False
 
 start = 0
 playing = 1
@@ -85,8 +89,13 @@ while running:
                 dino_speed = 0
 
                 score = 0
-                obstacle_speed = 5
                 jumping = False
+
+                level = 1 
+                obstacle_speed = 5
+
+                gap_min = 400
+                gap_max = 550
 
                 obstacles = [
                     [800, 1, 25, 70, False],
@@ -131,6 +140,42 @@ while running:
             dino_speed = 0
             jumping = False
 
+        if score < 5:
+
+            level = 1
+
+            obstacle_speed = 5
+
+            gap_min = 400
+            gap_max = 550
+
+        elif score < 10:
+
+            level = 2
+
+            obstacle_speed = 6
+
+            gap_min = 350
+            gap_max = 500
+
+        elif score < 20:
+
+            level = 3
+
+            obstacle_speed = 7
+
+            gap_min = 300
+            gap_max = 450
+
+        else:
+
+            level = 4
+
+            obstacle_speed = 8
+
+            gap_min = 280
+            gap_max = 400
+
         for obstacle in obstacles:
 
             obstacle[0] = obstacle[0] - obstacle_speed
@@ -143,13 +188,6 @@ while running:
                 if score > high_score:
                     high_score = score
 
-                if score % 5 == 0:
-
-                    obstacle_speed = obstacle_speed + 1
-
-                    if obstacle_speed > 10:
-                        obstacle_speed = 10
-
             if obstacle[0] + obstacle[2] < 0:
 
                 furthest_x = max(
@@ -157,15 +195,21 @@ while running:
                     obstacles[1][0]
                 )
 
-                gap = random.randint(250, 450)
+                gap = random.randint(
+                    gap_min,
+                    gap_max
+                )
 
                 obstacle[0] = max(
                     width,
                     furthest_x + gap
                 )
 
-                if score < 5:
+                if level == 1:
                     obstacle[1] = random.randint(1,2)
+
+                elif level == 2:
+                    obstacle[1] = random.randint(1,3)
 
                 else:
                     obstacle[1] = random.randint(1,4)
@@ -218,7 +262,7 @@ while running:
 
                     if dino_x < obstacle[0] + obstacle[2]:
 
-                        if dino_y < obstacle[0] + obstacle[3]:
+                        if dino_y < low_obstacle + obstacle[3]:
 
                             if dino_y + dino_height > low_obstacle:
 
@@ -279,7 +323,7 @@ while running:
                     (180, 50, 50),
                     (
                         int(obstacle[0]),
-                        high_obstacle,
+                        low_obstacle,
                         obstacle[2],
                         obstacle[3]
                     )
