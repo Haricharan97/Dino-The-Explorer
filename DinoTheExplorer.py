@@ -32,15 +32,14 @@ pygame.display.set_caption("Dino The Explorer")
 clock = pygame.time.Clock()
 
 ground = 350
-
-obstacle_x = 800
-obstacle_width = 25
-obstacle_height = 70
 obstacle_speed = 5
-obstacle_type = 1
-
 high_obstacle = 280
 low_obstacle = 320
+
+obstacles = [
+    [800, 1, 25, 70, False],
+    [1150, 2, 55, 70, False]
+]
 
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
@@ -85,17 +84,14 @@ while running:
                 dino_y = ground - dino_height
                 dino_speed = 0
 
-                obstacle_x = 800
-                obstacle_width = 25
-                obstacle_height = 70
-                obstacle_type = 1
-
                 score = 0
-                passed = False
-
                 obstacle_speed = 5
-
                 jumping = False
+
+                obstacles = [
+                    [800, 1, 25, 70, False],
+                    [1150, 2, 55, 70, False]
+                ]
 
             elif event.key == pygame.K_ESCAPE and state == playing:
                 state = paused
@@ -135,76 +131,98 @@ while running:
             dino_speed = 0
             jumping = False
 
-        obstacle_x = obstacle_x - obstacle_speed
+        for obstacle in obstacles:
 
-        if obstacle_x + obstacle_width < dino_x and passed == False:
-            score = score + 1
-            passed = True
+            obstacle[0] = obstacle[0] - obstacle_speed
 
-            if score > high_score:
-                 high_score = score
+            if obstacle[0] + obstacle[2] < dino_x and obstacle[4] == False:
 
-            if score % 5 == 0:
-                 obstacle_speed = obstacle_speed + 1
+                score = score + 1
+                obstacle[4] = True
 
-                 if obstacle_speed > 10:
-                      obstacle_speed = 10
+                if score > high_score:
+                    high_score = score
 
-        if obstacle_x + obstacle_width < 0:
-            obstacle_x = random.randint(800, 1100)
+                if score % 5 == 0:
 
-            if score < 5:
-                obstacle_type = random.randint(1,2)
-            else:
-                 obstacle_type = random.randint(1,4)
+                    obstacle_speed = obstacle_speed + 1
 
-            if obstacle_type == 1:
-                 obstacle_width = 25
-                 obstacle_height = 70
+                    if obstacle_speed > 10:
+                        obstacle_speed = 10
 
-            elif obstacle_type == 2:
-                 obstacle_width = 55
-                 obstacle_height = 70
+            if obstacle[0] + obstacle[2] < 0:
 
-            elif obstacle_type == 3:
-                 obstacle_width = 50
-                 obstacle_height = 25
+                furthest_x = max(
+                    obstacles[0][0],
+                    obstacles[1][0]
+                )
 
-            elif obstacle_type == 4:
-                 obstacle_width = 50
-                 obstacle_height = 25
+                gap = random.randint(250, 450)
 
-            passed = False
+                obstacle[0] = max(
+                    width,
+                    furthest_x + gap
+                )
 
-        if obstacle_type == 1 or obstacle_type == 2:
+                if score < 5:
+                    obstacle[1] = random.randint(1,2)
 
-            if dino_x + dino_width > obstacle_x:
+                else:
+                    obstacle[1] = random.randint(1,4)
 
-                if dino_x < obstacle_x + obstacle_width:
+                if obstacle[1] == 1:
 
-                    if dino_y + dino_height > ground - obstacle_height:
-                        state = over
+                    obstacle[2] = 25
+                    obstacle[3] = 70
 
-        elif obstacle_type == 3:
-             if dino_x + dino_width > obstacle_x:
+                elif obstacle[1] == 2:
 
-                if dino_x < obstacle_x + obstacle_width:
+                    obstacle[2] = 55
+                    obstacle[3] = 70
 
-                    if dino_y < high_obstacle + obstacle_height:
+                elif obstacle[1] == 3:
 
-                        if dino_y + dino_height > high_obstacle:
+                    obstacle[2] = 50
+                    obstacle[3] = 25
+
+                elif obstacle[1] == 4:
+
+                    obstacle[2] = 50
+                    obstacle[3] = 25
+
+                obstacle[4] = False
+
+            if obstacle[1] == 1 or obstacle[1] == 2:
+
+                if dino_x + dino_width > obstacle[0]:
+
+                    if dino_x < obstacle[0] + obstacle[2]:
+
+                        if dino_y + dino_height > ground - obstacle[3]:
                             state = over
 
-        elif obstacle_type == 4:
+            elif obstacle[1] == 3:
 
-            if dino_x + dino_width > obstacle_x:
+                if dino_x + dino_width > obstacle[0]:
 
-                if dino_x < obstacle_x + obstacle_width:
+                    if dino_x < obstacle[0] + obstacle[2]:
 
-                    if dino_y < low_obstacle + obstacle_height:
+                        if dino_y < high_obstacle + obstacle[3]:
 
-                        if dino_y + dino_height > low_obstacle:
-                            state = over
+                            if dino_y + dino_height > high_obstacle:
+                                state = over
+
+            elif obstacle[1] == 4:
+
+                if dino_x + dino_width > obstacle[0]:
+
+                    if dino_x < obstacle[0] + obstacle[2]:
+
+                        if dino_y < obstacle[0] + obstacle[3]:
+
+                            if dino_y + dino_height > low_obstacle:
+
+                                state = over
 
     screen.fill((240,240,240))
 
@@ -225,44 +243,47 @@ while running:
             )
     )
 
-    if obstacle_type == 1 or obstacle_type == 2:
+    for obstacle in obstacles:
 
-        pygame.draw.rect(
-            screen,
-            (0, 120, 0),
-            (
-                int(obstacle_x),
-                ground - obstacle_height,
-                obstacle_width,
-                obstacle_height
+
+        if obstacle[1] == 1 or obstacle[1] == 2:
+
+            pygame.draw.rect(
+                screen,
+                (0, 120, 0),
+                (
+                    int(obstacle[0]),
+                    ground - obstacle[3],
+                    obstacle[2],
+                    obstacle[3]
+                )
             )
-        )
 
-    elif obstacle_type == 3:
+        elif obstacle[1] == 3:
 
-         pygame.draw.rect(
-              screen,
-              (180, 50, 50),
-              (
-                   int(obstacle_x),
-                   high_obstacle,
-                   obstacle_width,
-                   obstacle_height
-              )
-         )
+            pygame.draw.rect(
+                screen,
+                (180, 50, 50),
+                (
+                    int(obstacle[0]),
+                    high_obstacle,
+                    obstacle[2],
+                    obstacle[3]
+                )
+            )
 
-    elif obstacle_type == 4:
-    
-             pygame.draw.rect(
-                  screen,
-                  (180, 50, 50),
-                  (
-                       int(obstacle_x),
-                       low_obstacle,
-                       obstacle_width,
-                       obstacle_height
-                  )
-             )
+        elif obstacle[1] == 4:
+        
+                pygame.draw.rect(
+                    screen,
+                    (180, 50, 50),
+                    (
+                        int(obstacle[0]),
+                        high_obstacle,
+                        obstacle[2],
+                        obstacle[3]
+                    )
+                )
 
     pygame.draw.line(
         screen,
