@@ -485,7 +485,7 @@ while running:
     pygame.draw.rect(
         screen,
         (150, 95, 55),
-        (0, ground, width, height - ground)
+        (0, ground, width, height - ground),
     )
 
     pygame.draw.rect(
@@ -519,31 +519,149 @@ while running:
 
     for obstacle in obstacles:
 
-        if obstacle[1] == 1 or obstacle[1] == 2:
+        obstacle_x = int(obstacle[0])
+        obstacle_width = obstacle[2]
+        obstacle_height = obstacle[3]
+
+        if obstacle[1] == 1:
+
+            cactus_y = ground - obstacle_height
 
             pygame.draw.rect(
                 screen,
-                (0, 120, 0),
+                (30, 130, 55),
                 (
-                    int(obstacle[0]),
-                    ground - obstacle[3],
-                    obstacle[2],
-                    obstacle[3]
+                    obstacle_x,
+                    cactus_y,
+                    obstacle_width,
+                    obstacle_height
                 )
             )
-
-        elif obstacle[1] == 3:
 
             pygame.draw.rect(
                 screen,
-                (180, 50, 50),
+                (55, 165, 70),
                 (
-                    int(obstacle[0]),
-                    high_obstacle,
-                    obstacle[2],
-                    obstacle[3]
+                    obstacle_x + 4,
+                    cactus_y + 5,
+                    4,
+                    obstacle_height - 10
                 )
             )
+
+            pygame.draw.rect(
+                screen,
+                (30, 130, 55),
+                (
+                    obstacle_x - 7,
+                    cactus_y + 25,
+                    9,
+                    8 
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (30, 130, 55),
+                (
+                    obstacle_x - 7,
+                    cactus_y + 17,
+                    6,
+                    15
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (30, 130, 55),
+                (
+                    obstacle_x + obstacle_width - 2,
+                    cactus_y + 35,
+                    8,
+                    8
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (30, 130, 55),
+                (
+                    obstacle_x + obstacle_width + 2,
+                    cactus_y + 27,
+                    5,
+                    15
+                )
+            )
+
+        elif obstacle[1] == 2:
+            cactus_y = ground - obstacle_height
+            pygame.draw.rect(
+                screen,
+                (25, 115, 50),
+                (
+                    obstacle_x,
+                    cactus_y,
+                    obstacle_width,
+                    obstacle_height
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (55, 155, 65),
+                (
+                    obstacle_x + obstacle_width // 2 - 3,
+                    cactus_y + 4,
+                    6,
+                    obstacle_height - 8
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (25, 115, 50),
+                (
+                    obstacle_x - 10,
+                    cactus_y + 30,
+                    12,
+                    10
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (25, 115, 50),
+                (
+                    obstacle_x - 10,
+                    cactus_y + 18,
+                    7,
+                    20
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (25, 115, 50),
+                (
+                    obstacle_x + obstacle_width - 2,
+                    cactus_y + 20,
+                    12,
+                    10
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (25, 115, 50),
+                (
+                    obstacle_x + obstacle_width + 4,
+                    cactus_y + 10,
+                    6,
+                    20
+                )
+            )
+
+        
 
         elif obstacle[1] == 4:
         
