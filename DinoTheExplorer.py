@@ -59,6 +59,14 @@ coins = 0
 
 coin_type = 1
 
+clouds = [
+    [100, 70, 1.0],
+    [350, 110, 0.7],
+    [650, 50, 1.2]
+]
+
+cloud_speed = 1
+
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
 
@@ -92,7 +100,7 @@ while running:
                 if dino_y + dino_height >= ground:
                     dino_height = normal_height
                     dino_y = ground - dino_height
-                    current_jump = jump - (obstacle_speed -5) * 0.4
+                    current_jump = jump
                     dino_speed = current_jump
                     jumping = True
 
@@ -158,7 +166,7 @@ while running:
                 dino_y = ground - dino_height
 
         if jumping == True and dino_speed < 0:
-            dino_speed = dino_speed - 0.35
+            dino_speed = dino_speed - 0.25
 
         dino_speed = dino_speed + gravity
 
@@ -208,6 +216,13 @@ while running:
             gap_min = 300
             gap_max = 400
 
+        for cloud in clouds:
+                    cloud[0] = cloud[0] - cloud_speed
+                    if cloud[0] < - 100:
+                        cloud[0] = width + random.randint(100, 300)
+                        cloud[1] = random.randint(40, 150)
+                        cloud[2] = random.choice([0.7, 1.0, 1.2])
+
         for obstacle in obstacles:
 
             obstacle[0] = obstacle[0] - obstacle_speed
@@ -252,11 +267,6 @@ while running:
 
                     obstacle[2] = random.randint(45, 65)
                     obstacle[3] = random.randint(60, 85)
-
-                elif obstacle[1] == 2:
-
-                    obstacle[2] = 55
-                    obstacle[3] = 70
 
                 elif obstacle[1] == 3:
 
@@ -340,18 +350,6 @@ while running:
                     if dino_x < obstacle[0] + obstacle[2]:
                         if dino_y + dino_height > ground - obstacle[3]:
                             hit = True
-
-            elif obstacle[1] == 5:
-                pygame.draw.rect(
-                    screen,
-                    (20, 150, 50),
-                    (
-                        int(obstacle[0]),
-                        ground - obstacle[3],
-                        obstacle[2],
-                        obstacle[3]
-                    )
-                )
 
         if hit == True:
 
@@ -437,6 +435,10 @@ while running:
 
     screen.fill((135, 206, 240))
 
+    for cloud in clouds:
+
+        cloud_x = int(cloud[0])
+
     pygame.draw.rect(
         screen,
         (180, 180, 180),
@@ -496,6 +498,18 @@ while running:
                     )
                 )
 
+        elif obstacle[1] == 5:
+            pygame.draw.rect(
+                screen,
+                (20, 150, 50),
+                (
+                    int(obstacle[0]),
+                    ground - obstacle[3],
+                    obstacle[2],
+                    obstacle[3]
+                )
+            )
+
     if coin_type == 1:
 
         coin_cx = int(coin_x) + coin_size // 2
@@ -531,26 +545,61 @@ while running:
 
     elif coin_type == 2:
 
-        pygame.draw.rect(
+        coin_cx = int(coin_x) + coin_size // 2
+        coin_cy = int(coin_y) + coin_size // 2
+        
+        pygame.draw.circle(
             screen,
-            (255, 220, 0),
-            (
-                int(coin_x),
-                int(coin_y),
-                coin_size,
-                coin_size
-            )
+            (255, 245, 120),
+            (coin_cx, coin_cy),
+            coin_size // 2 + 5
         )
 
-        pygame.draw.rect(
+        pygame.draw.circle(
             screen,
-            (255, 0, 0),
-            (
-                int(coin_x) + 6,
-                int(coin_y) + 6,
-                8,
-                8
-            )
+            (190, 90, 0),
+            (coin_cx, coin_cy),
+            coin_size // 2 + 2
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 210, 0),
+            (coin_cx, coin_cy),
+            coin_size // 2
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 140, 0),
+            (coin_cx, coin_cy),
+            coin_size // 2 - 3
+        )
+
+        star_points = [
+            (coin_cx, coin_cy - 6),
+            (coin_cx + 2, coin_cy - 2),
+            (coin_cx + 6, coin_cy - 2),
+            (coin_cx + 3, coin_cy + 1),
+            (coin_cx + 4, coin_cy + 6),
+            (coin_cx, coin_cy + 3),
+            (coin_cx - 4, coin_cy + 6),
+            (coin_cx - 3, coin_cy + 1),
+            (coin_cx - 6, coin_cy - 2),
+            (coin_cx - 2, coin_cy - 2)
+        ]
+
+        pygame.draw.polygon(
+            screen,
+            (255, 255, 180),
+            star_points
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 255, 255),
+            (coin_cx - 4, coin_cy - 5),
+            2
         )
 
     pygame.draw.line(
@@ -653,7 +702,7 @@ while running:
         )
 
         resume_text = small_font.render(
-            "Pess SPACE to Resume",
+            "Press SPACE to Resume",
             True,
             (0, 0, 0)
         )
