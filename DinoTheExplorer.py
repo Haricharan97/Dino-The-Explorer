@@ -442,7 +442,7 @@ while running:
         cloud_size = cloud[2]
 
         pygame.draw.circle(
-            screen, screen,
+            screen,
             (255, 255, 255),
             (
                 cloud_x,
@@ -484,8 +484,26 @@ while running:
 
     pygame.draw.rect(
         screen,
-        (180, 180, 180),
+        (150, 95, 55),
         (0, ground, width, height - ground)
+    )
+
+    pygame.draw.rect(
+        screen,
+        (120, 75, 45),
+        (0, ground + 25, width, height - ground - 25)
+    )
+
+    pygame.draw.rect(
+        screen,
+        (70, 170, 70),
+        (0, ground - 8, width, 12)
+    )
+
+    pygame.draw.rect(
+        screen,
+        (110, 200, 90),
+        (0, ground - 8, width, 4)
     )
 
     pygame.draw.rect(
@@ -643,14 +661,6 @@ while running:
             (coin_cx - 4, coin_cy - 5),
             2
         )
-
-    pygame.draw.line(
-        screen,
-        (0, 0, 0),
-        (0, ground),
-        (width, ground),
-        3
-    )
 
     score_text = small_font.render(
         "Score: " + str(score),
