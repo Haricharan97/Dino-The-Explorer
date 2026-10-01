@@ -661,7 +661,61 @@ while running:
                 )
             )
 
-        
+        elif obstacle[1] == 3: 
+            bird_y = high_obstacle
+
+            pygame.draw.rect(
+                screen,
+                (180, 50, 50),
+                (
+                    obstacle_x,
+                    bird_y,
+                    obstacle_width,
+                    obstacle_height
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (120, 30, 30),
+                (
+                    obstacle_x + 20,
+                    bird_y + 7,
+                    20,
+                    10
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                (230, 160, 40),
+                [
+                    obstacle_x - 18,
+                    bird_y + 10,
+                    18,
+                    6
+                ]
+            )
+
+            pygame.draw.circle(
+                screen,
+                (255, 255, 255),
+                (
+                    obstacle_x + 8,
+                    bird_y + 7   
+                ),
+                4
+            )
+
+            pygame.draw.circle(
+                screen,
+                (0, 0, 0),
+                (
+                    obstacle_x + 6,
+                    bird_y + 7
+                ),
+                2
+            )
 
         elif obstacle[1] == 4:
         
