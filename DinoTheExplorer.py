@@ -438,6 +438,49 @@ while running:
     for cloud in clouds:
 
         cloud_x = int(cloud[0])
+        cloud_y = int(cloud[1])
+        cloud_size = cloud[2]
+
+        pygame.draw.circle(
+            screen, screen,
+            (255, 255, 255),
+            (
+                cloud_x,
+                cloud_y
+            ),
+            int(18 * cloud_size)
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 255, 255),
+            (
+                cloud_x + int(20 * cloud_size),
+                cloud_y - int(8 * cloud_size)
+            ),
+            int(22 * cloud_size),
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 255, 255),
+            (
+                cloud_x + int(42 * cloud_size),
+                cloud_y
+            ),
+            int(18 * cloud_size)
+        )
+
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),
+            (
+                cloud_x,
+                cloud_y,
+                int(45 * cloud_size),
+                int(18 * cloud_size)
+            )
+        )
 
     pygame.draw.rect(
         screen,
@@ -457,7 +500,6 @@ while running:
     )
 
     for obstacle in obstacles:
-
 
         if obstacle[1] == 1 or obstacle[1] == 2:
 
