@@ -17,7 +17,7 @@ crouch_height = 35
 
 dino_speed = 0
 gravity = 0.8
-jump = -15
+jump = -12
 
 current_jump = jump
 
@@ -136,8 +136,8 @@ while running:
             if event.key == pygame.K_UP:
                   jumping = False
 
-                  if dino_speed < -6:
-                      dino_speed = -6
+                  if dino_speed < -5:
+                      dino_speed = -5
 
     if state == playing:
 
@@ -241,12 +241,17 @@ while running:
                     obstacle[1] = random.randint(1,3)
 
                 else:
-                    obstacle[1] = random.randint(1,4)
+                    obstacle[1] = random.randint(1,5)
 
                 if obstacle[1] == 1:
 
-                    obstacle[2] = 25
-                    obstacle[3] = 70
+                    obstacle[2] = random.randint(20, 30)
+                    obstacle[3] = random.randint(55, 75)
+
+                elif obstacle[1] == 2:
+
+                    obstacle[2] = random.randint(45, 65)
+                    obstacle[3] = random.randint(60, 85)
 
                 elif obstacle[1] == 2:
 
@@ -262,6 +267,11 @@ while running:
 
                     obstacle[2] = 50
                     obstacle[3] = 25
+
+                elif obstacle[1] == 5:
+
+                    obstacle[2] = random.randint(90, 140)
+                    obstacle[3] = random.randint(35, 50)
 
                 gap = random.randint(
                     gap_min,
@@ -324,6 +334,24 @@ while running:
                             if dino_y + dino_height > low_obstacle:
 
                                 hit = True
+
+            elif obstacle[1] == 5:
+                if dino_x + dino_width > obstacle[0]:
+                    if dino_x < obstacle[0] + obstacle[2]:
+                        if dino_y + dino_height > ground - obstacle[3]:
+                            hit = True
+
+            elif obstacle[1] == 5:
+                pygame.draw.rect(
+                    screen,
+                    (20, 150, 50),
+                    (
+                        int(obstacle[0]),
+                        ground - obstacle[3],
+                        obstacle[2],
+                        obstacle[3]
+                    )
+                )
 
         if hit == True:
 
@@ -407,7 +435,7 @@ while running:
             else:
                 coin_type = 1
 
-    screen.fill((240,240,240))
+    screen.fill((135, 206, 240))
 
     pygame.draw.rect(
         screen,
@@ -470,15 +498,35 @@ while running:
 
     if coin_type == 1:
 
-        pygame.draw.rect(
+        coin_cx = int(coin_x) + coin_size // 2
+        coin_cy = int(coin_y) + coin_size // 2
+
+        pygame.draw.circle(
+            screen,
+            (180, 120, 0),
+            (coin_cx, coin_cy),
+            coin_size // 2
+        )
+
+        pygame.draw.circle(
             screen,
             (255, 190, 0),
-            (
-                int(coin_x),
-                int(coin_y),
-                coin_size,
-                coin_size
-            )
+            (coin_cx, coin_cy),
+            coin_size // 2 - 2 
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 225, 80),
+            (coin_cx, coin_cy),
+            coin_size // 2 - 5
+        )
+
+        pygame.draw.circle(
+            screen,
+            (255, 245, 100),
+            (coin_cx - 3, coin_cy - 3),
+            2
         )
 
     elif coin_type == 2:
