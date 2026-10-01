@@ -508,13 +508,79 @@ while running:
 
     pygame.draw.rect(
         screen,
-        (50, 50, 50),
+        (60, 150, 70),
         (
             int(dino_x),
-            int(dino_y), 
-            dino_width, 
-            dino_height
-            )
+            int(dino_y + 20), 
+            28, 
+            dino_height - 20
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (60, 150, 70),
+        (
+            int(dino_x + 20),
+            int(dino_y),
+            20,
+            25
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (60, 150, 70),
+        (
+            int(dino_x + 32),
+            int(dino_y + 10),
+            14,
+            10
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (60, 150, 70),
+        (
+            int(dino_x - 12),
+            int(dino_y + 32),
+            15,
+            10
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (45, 120, 55),
+        (
+            int(dino_x + 4),
+            int(dino_y + dino_height - 16),
+            8,
+            16
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (45, 120, 55),
+        (
+            int(dino_x + 20),
+            int(dino_y + dino_height - 15),
+            8,
+            16
+        )
+    )
+
+    pygame.draw.rect(
+        screen,
+        (255, 255, 255),
+        (
+            int(dino_x + 28),
+            int(dino_y + 5),
+            6,
+            6
+        )
     )
 
     for obstacle in obstacles:
