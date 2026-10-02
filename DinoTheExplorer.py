@@ -12,8 +12,8 @@ dino_y = 280
 dino_width = 40
 dino_height = 70
 
-normal_height = 70
-crouch_height = 35
+normal = 70
+crouch = 35
 
 dino_speed = 0
 gravity = 0.8
@@ -66,6 +66,9 @@ clouds = [
 ]
 
 cloud_speed = 1
+dino_frame = 0
+bird_frame = 0
+animation_timer = 0
 
 font = pygame.font.Font(None, 60)
 small_font = pygame.font.Font(None, 40)
@@ -98,7 +101,7 @@ while running:
 
             elif event.key == pygame.K_UP and state == playing:
                 if dino_y + dino_height >= ground:
-                    dino_height = normal_height
+                    dino_height = normal
                     dino_y = ground - dino_height
                     current_jump = jump
                     dino_speed = current_jump
@@ -108,7 +111,7 @@ while running:
 
                 state = playing
 
-                dino_height = normal_height
+                dino_height = normal
                 dino_y = ground - dino_height
                 dino_speed = 0
 
@@ -151,18 +154,33 @@ while running:
 
         hit = False
 
+        animation_timer = animation_timer + 1
+
+        if animation_timer >= 10:
+            animation_timer = 0
+
+            if dino_frame == 0:
+                dino_frame = 1
+            else:
+                dino_frame = 0  
+
+            if bird_frame == 0:
+                bird_frame = 1
+            else:
+                bird_frame = 0          
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_DOWN] and dino_y + dino_height >= ground:
              
-            dino_height = crouch_height
+            dino_height = crouch
             dino_y = ground - dino_height
 
         else:
 
             if dino_y + dino_height >= ground:
                   
-                dino_height = normal_height
+                dino_height = normal
                 dino_y = ground - dino_height
 
         if jumping == True and dino_speed < 0:
@@ -360,7 +378,7 @@ while running:
 
             else:
 
-                dino_height = normal_height
+                dino_height = normal
                 dino_y = ground - dino_height
                 dino_speed = 0
                 jumping = False
@@ -508,159 +526,267 @@ while running:
 
     dinoc = (153, 64, 148)
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 8),
-            int(dino_y + 22),
-            26,
-            28
+    if dino_height == crouch:
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 5),
+                int(dino_y + 12),
+                30,
+                18
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 24),
-            int(dino_y + 12),
-            10,
-            14
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 28),
+                int(dino_y + 5),
+                22,
+                18
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 22),
-            int(dino_y),
-            22,
-            18
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 43),
+                int(dino_y + 12),
+                10,
+                8
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 38),
-            int(dino_y + 8),
-            10,
-            8
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x - 8),
+                int(dino_y + 18),
+                16,
+                6
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 34),
-            int(dino_y + 14),
-            10,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 10),
+                int(dino_y + 28),
+                12,
+                7
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x),
-            int(dino_y + 30),
-            10,
-            8
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 29),
+                int(dino_y + 28),
+                12,
+                7
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 8),
-            int(dino_y + 34),
-            10,
-            4
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),
+            (
+                int(dino_x + 35),
+                int(dino_x + 9),
+                4,
+                4
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 10),
-            int(dino_y + 50),
-            8,
-            20
-        )
-    )
+    else:
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 24),
-            int(dino_y + 50),
-            8,
-            20
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 8),
+                int(dino_y + 22),
+                26,
+                28
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 8),
-            int(dino_y + 66),
-            12,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 24),
+                int(dino_y + 12),
+                10,
+                14
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 22),
-            int(dino_y + 66),
-            12,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 22),
+                int(dino_y),
+                22,
+                18
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 28),
-            int(dino_y + 28),
-            8,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 38),
+                int(dino_y + 8),
+                10,
+                8
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        dinoc,
-        (
-            int(dino_x + 32),
-            int(dino_y + 31),
-            4,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 34),
+                int(dino_y + 14),
+                10,
+                4
+            )
         )
-    )
 
-    pygame.draw.rect(
-        screen,
-        (255, 255, 255),
-        (
-            int(dino_x + 30),
-            int(dino_y + 4),
-            4,
-            4
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x),
+                int(dino_y + 30),
+                10,
+                8
+            )
         )
-    )
+
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x - 8),
+                int(dino_y + 34),
+                10,
+                4
+            )
+        )
+
+    if dino_y + dino_height >= ground:
+        if dino_frame == 0:
+
+            pygame.draw.rect(
+                screen,
+                dinoc,
+                (
+                    int(dino_x + 10),
+                    int(dino_y + 45),
+                    8,
+                    20
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                dinoc,
+                (
+                    int(dino_x + 24),
+                    int(dino_y + 50),
+                    8,
+                    20
+                )
+            )
+
+        else:
+            pygame.draw.rect(
+                screen,
+                dinoc,
+                (
+                    int(dino_x + 10),
+                    int(dino_y + 50),
+                    8,
+                    20
+                )
+            )
+
+            pygame.draw.rect(
+                screen,
+                dinoc,
+                (
+                    int(dino_x + 24),
+                    int(dino_y + 45),
+                    8,
+                    20
+                )
+            )
+
+    else:
+
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 10),
+                int(dino_y + 50),
+                8,
+                16
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 24),
+                int(dino_y + 50),
+                8,
+                16
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 28),
+                int(dino_y + 28),
+                8,
+                4
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            dinoc,
+            (
+                int(dino_x + 32),
+                int(dino_y + 31),
+                4,
+                4
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),
+            (
+                int(dino_x + 30),
+                int(dino_y + 4),
+                4,
+                4
+            )
+        )
 
     for obstacle in obstacles:
 
