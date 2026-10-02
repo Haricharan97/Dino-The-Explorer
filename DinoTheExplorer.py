@@ -598,7 +598,7 @@ while running:
             (255, 255, 255),
             (
                 int(dino_x + 35),
-                int(dino_x + 9),
+                int(dino_y + 9),
                 4,
                 4
             )
@@ -679,6 +679,17 @@ while running:
                 int(dino_x - 8),
                 int(dino_y + 34),
                 10,
+                4
+            )
+        )
+
+        pygame.draw.rect(
+            screen,
+            (255, 255, 255),
+            (
+                int(dino_x + 30),
+                int(dino_y + 4),
+                4,
                 4
             )
         )
@@ -773,17 +784,6 @@ while running:
                 (
                     int(dino_x + 32),
                     int(dino_y + 31),
-                    4,
-                    4
-                )
-            )
-
-            pygame.draw.rect(
-                screen,
-                (255, 255, 255),
-                (
-                    int(dino_x + 30),
-                    int(dino_y + 4),
                     4,
                     4
                 )
