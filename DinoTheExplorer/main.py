@@ -1062,16 +1062,91 @@ async def main():
                     )
 
             elif obstacle[1] == 5:
-                pygame.draw.rect(
-                    screen,
-                    (20, 150, 50),
-                    (
-                        int(obstacle[0]),
-                        ground - obstacle[3],
-                        obstacle[2],
-                        obstacle[3]
+
+                caccu = 3
+                gap = 6
+                uswi = obstacle_width - gap * (caccu - 1)
+                siwi = uswi // caccu
+
+                heights = [
+                    max(20, int(obstacle_height * 0.75)),
+                    obstacle_height,
+                    max(18, int(obstacle_height * 0.6))
+                ]
+
+                for i in range(caccu):
+                    cactuw = max(12, siwi)
+                    cactuh = heights[i]
+                    cactux = obstacle_x + i * (siwi + gap)
+                    cactuy = ground - cactuh
+
+                    pygame.draw.rect(
+                        screen,
+                        (30, 130, 55),
+                        (
+                            cactux,
+                            cactuy,
+                            cactuw,
+                            cactuh
+                        )
                     )
-                )
+
+                    pygame.draw.rect(
+                        screen,
+                        (55, 165, 70),
+                        (
+                            cactux + cactuw // 2 - 2,
+                            cactuy + 4,
+                            4,
+                            cactuh - 8
+                        )
+                    ) 
+
+                    if i != 1:
+                        pygame.draw.rect(
+                            screen,
+                            (30, 130, 55),
+                            (
+                                cactux - 5,
+                                cactuy + cactuh // 2,
+                                7,
+                                7
+                            )
+                        )
+
+                        pygame.draw.rect(
+                            screen,
+                            (30, 130, 55),
+                            (
+                                cactux - 5,
+                                cactuy + cactuh // 2 - 10,
+                                4,
+                                12
+                            )
+                        )
+
+                    if i != 0:
+                        pygame.draw.rect(
+                            screen,
+                            (30, 130, 55),
+                            (
+                                cactux + cactuw - 1,
+                                cactuy + cactuh // 2 - 5,
+                                7,
+                                7
+                            )
+                        )
+
+                        pygame.draw.rect(
+                            screen,
+                            (30, 130, 55),
+                            (
+                                cactux + cactuw + 2,
+                                cactuy + cactuh // 2 - 15,
+                                4,
+                                12
+                            )
+                        )
 
         if coin_type == 1:
 
